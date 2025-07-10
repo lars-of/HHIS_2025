@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HHIS 2025 - Mein Programm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #2196F3;
+            color: #2196F3;
+            font-weight: bold;
+        }
+        
+        .tab:hover {
+            background: rgba(33, 150, 243, 0.1);
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .stage-content {
+            display: none;
+        }
+        
+        .stage-content.active {
+            display: block;
+        }
+        
+        .event-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .event-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .event-card.selected {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+        
+        .event-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+        }
+        
+        .event-time {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 8px;
+        }
+        
+        .event-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .event-speaker {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .event-details {
+            padding: 20px;
+            background: white;
+        }
+        
+        .event-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-program {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .add-to-program:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+        }
+        
+        .add-to-program.added {
+            background: #4CAF50;
+        }
+        
+        .my-program {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .my-program h2 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .my-program-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .program-info {
+            flex: 1;
+        }
+        
+        .program-time {
+            font-weight: bold;
+            color: #2196F3;
+        }
+        
+        .program-title {
+            color: #333;
+            margin: 5px 0;
+        }
+        
+        .program-stage {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .remove-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .notification-settings {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .notification-item input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin-left: 10px;
+        }
+        
+        .status-indicator.warning {
+            background: #FF9800;
+        }
+        
+        .next-event {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .next-event h3 {
+            margin-bottom: 10px;
+        }
+        
+        .time-until {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 HHIS 2025</h1>
+            <p>10. Juli 2025 • Oberhafenquartier Hamburg • Mein persönliches Programm</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" onclick="showStage('startup')">Startup Stage</button>
+            <button class="tab" onclick="showStage('talent')">Talent Hub</button>
+            <button class="tab" onclick="showStage('social')">Social Innovation</button>
+            <button class="tab" onclick="showStage('kitchen')">Kitchen Talks</button>
+            <button class="tab" onclick="showStage('summit')">Summit Stage</button>
+            <button class="tab" onclick="showStage('ai')">AI Hub</button>
+            <button class="tab" onclick="showStage('mein-programm')">📅 Mein Programm</button>
+        </div>
+        
+        <div class="content">
+            <!-- Startup Stage -->
+            <div class="stage-content active" id="startup">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">17:15 - 18:00</div>
+                        <div class="event-title">Inspirational Talk: Innovation groß denken</div>
+                        <div class="event-speaker">Dr. Frederike Fritzsche, Otto</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">HHIS-Botschafterin über zukunftsfähige Unternehmen und Tech-Begeisterung.</div>
+                        <button class="add-to-program" onclick="addToProgram('17:15', '18:00', 'Inspirational Talk: Innovation groß denken', 'Summit Stage', 'Dr. Frederike Fritzsche, Otto')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">18:30 - 19:15</div>
+                        <div class="event-title">Inspirational Talk: Mutige Innovationskultur</div>
+                        <div class="event-speaker">Dr. Hans Rusinek</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Innovation zwischen Idealismus und Pragmatismus.</div>
+                        <button class="add-to-program" onclick="addToProgram('18:30', '19:15', 'Inspirational Talk: Mutige Innovationskultur', 'Summit Stage', 'Dr. Hans Rusinek')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">20:00 - 21:00</div>
+                        <div class="event-title">Networking & Abschluss</div>
+                        <div class="event-speaker">Alle Teilnehmer*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Gemeinsamer Ausklang mit Networking-Möglichkeiten.</div>
+                        <button class="add-to-program" onclick="addToProgram('20:00', '21:00', 'Networking & Abschluss', 'Summit Stage', 'Alle Teilnehmer*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Hub -->
+            <div class="stage-content" id="ai">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">10:15 - 11:00</div>
+                        <div class="event-title">KI & Quantencomputing in Hamburg</div>
+                        <div class="event-speaker">Fraunhofer Institute</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Vorstellung des ersten Quantencomputers der Hansestadt.</div>
+                        <button class="add-to-program" onclick="addToProgram('10:15', '11:00', 'KI & Quantencomputing in Hamburg', 'AI Hub', 'Fraunhofer Institute')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">11:45 - 12:30</div>
+                        <div class="event-title">Machine Learning in der Praxis</div>
+                        <div class="event-speaker">AI Researchers</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Praktische Anwendungen von Machine Learning in Unternehmen.</div>
+                        <button class="add-to-program" onclick="addToProgram('11:45', '12:30', 'Machine Learning in der Praxis', 'AI Hub', 'AI Researchers')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">13:45 - 14:30</div>
+                        <div class="event-title">KI-Ethik und verantwortliche AI</div>
+                        <div class="event-speaker">Ethik Expert*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Verantwortungsvoller Einsatz von Künstlicher Intelligenz.</div>
+                        <button class="add-to-program" onclick="addToProgram('13:45', '14:30', 'KI-Ethik und verantwortliche AI', 'AI Hub', 'Ethik Expert*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">15:30 - 16:15</div>
+                        <div class="event-title">Hands-on: AI Tools für Unternehmen</div>
+                        <div class="event-speaker">Tech Consultants</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Interaktive Session mit praktischen AI-Tools und Anwendungen.</div>
+                        <button class="add-to-program" onclick="addToProgram('15:30', '16:15', 'Hands-on: AI Tools für Unternehmen', 'AI Hub', 'Tech Consultants')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">17:30 - 18:15</div>
+                        <div class="event-title">Zukunft der Arbeit mit KI</div>
+                        <div class="event-speaker">Future of Work Panel</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Wie KI die Arbeitswelt transformiert.</div>
+                        <button class="add-to-program" onclick="addToProgram('17:30', '18:15', 'Zukunft der Arbeit mit KI', 'AI Hub', 'Future of Work Panel')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mein Programm -->
+            <div class="stage-content" id="mein-programm">
+                <div id="next-event-container"></div>
+                
+                <div class="my-program">
+                    <h2>📅 Mein persönliches HHIS-Programm</h2>
+                    <div id="my-program-list">
+                        <p style="text-align: center; color: #666; padding: 20px;">
+                            Noch keine Termine ausgewählt. Wählen Sie Vorträge aus den verschiedenen Bühnen aus, um Ihr persönliches Programm zu erstellen.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="notification-settings">
+                    <h3>🔔 Benachrichtigungseinstellungen</h3>
+                    <div class="notification-item">
+                        <input type="checkbox" id="notify-15min" checked>
+                        <label for="notify-15min">15 Minuten vor Beginn benachrichtigen</label>
+                    </div>
+                    <div class="notification-item">
+                        <input type="checkbox" id="notify-5min" checked>
+                        <label for="notify-5min">5 Minuten vor Beginn benachrichtigen</label>
+                    </div>
+                    <div class="notification-item">
+                        <input type="checkbox" id="notify-start">
+                        <label for="notify-start">Bei Beginn benachrichtigen</label>
+                    </div>
+                    <div class="notification-item">
+                        <input type="checkbox" id="sound-notifications" checked>
+                        <label for="sound-notifications">Ton für Benachrichtigungen</label>
+                    </div>
+                    <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                        <span class="status-indicator" id="notification-status"></span>
+                        Benachrichtigungen sind aktiv
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myProgram = JSON.parse(localStorage.getItem('hhisProgram') || '[]');
+        let notificationIntervals = [];
+
+        function showStage(stageId) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.stage-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            event.target.classList.add('active');
+            document.getElementById(stageId).classList.add('active');
+            
+            if (stageId === 'mein-programm') {
+                updateMyProgramDisplay();
+                updateNextEvent();
+            }
+        }
+
+        function toggleDetails(header) {
+            const card = header.parentElement;
+            const details = card.querySelector('.event-details');
+            const isVisible = details.style.display === 'block';
+            
+            // Close all other details
+            document.querySelectorAll('.event-details').forEach(detail => {
+                detail.style.display = 'none';
+            });
+            document.querySelectorAll('.event-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            if (!isVisible) {
+                details.style.display = 'block';
+                card.classList.add('selected');
+            }
+        }
+
+        function addToProgram(startTime, endTime, title, stage, speaker) {
+            const event = {
+                startTime,
+                endTime,
+                title,
+                stage,
+                speaker,
+                id: `${startTime}-${stage}-${title}`.replace(/[^a-zA-Z0-9]/g, '')
+            };
+            
+            // Check if already added
+            if (myProgram.find(e => e.id === event.id)) {
+                alert('Dieser Termin ist bereits in Ihrem Programm!');
+                return;
+            }
+            
+            // Check for conflicts
+            const conflict = myProgram.find(e => {
+                const newStart = timeToMinutes(startTime);
+                const newEnd = timeToMinutes(endTime);
+                const existingStart = timeToMinutes(e.startTime);
+                const existingEnd = timeToMinutes(e.endTime);
+                
+                return (newStart < existingEnd && newEnd > existingStart);
+            });
+            
+            if (conflict) {
+                if (!confirm(`Konflikt mit "${conflict.title}" (${conflict.startTime}-${conflict.endTime}). Trotzdem hinzufügen?`)) {
+                    return;
+                }
+            }
+            
+            myProgram.push(event);
+            myProgram.sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+            localStorage.setItem('hhisProgram', JSON.stringify(myProgram));
+            
+            // Update button
+            event.target.textContent = 'Hinzugefügt ✓';
+            event.target.classList.add('added');
+            
+            setupNotifications();
+            
+            alert(`"${title}" wurde zu Ihrem Programm hinzugefügt!`);
+        }
+
+        function removeFromProgram(eventId) {
+            myProgram = myProgram.filter(e => e.id !== eventId);
+            localStorage.setItem('hhisProgram', JSON.stringify(myProgram));
+            updateMyProgramDisplay();
+            setupNotifications();
+            
+            // Reset button if visible
+            document.querySelectorAll('.add-to-program').forEach(btn => {
+                if (btn.textContent === 'Hinzugefügt ✓') {
+                    btn.textContent = 'Zu meinem Programm hinzufügen';
+                    btn.classList.remove('added');
+                }
+            });
+        }
+
+        function updateMyProgramDisplay() {
+            const container = document.getElementById('my-program-list');
+            
+            if (myProgram.length === 0) {
+                container.innerHTML = `
+                    <p style="text-align: center; color: #666; padding: 20px;">
+                        Noch keine Termine ausgewählt. Wählen Sie Vorträge aus den verschiedenen Bühnen aus, um Ihr persönliches Programm zu erstellen.
+                    </p>
+                `;
+                return;
+            }
+            
+            container.innerHTML = myProgram.map(event => `
+                <div class="my-program-item">
+                    <div class="program-info">
+                        <div class="program-time">${event.startTime} - ${event.endTime}</div>
+                        <div class="program-title">${event.title}</div>
+                        <div class="program-stage">${event.stage} • ${event.speaker}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromProgram('${event.id}')">Entfernen</button>
+                </div>
+            `).join('');
+        }
+
+        function updateNextEvent() {
+            const container = document.getElementById('next-event-container');
+            const now = new Date();
+            const today = now.getDate() === 10 && now.getMonth() === 6; // 10. Juli
+            
+            if (!today || myProgram.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const nextEvent = myProgram.find(event => timeToMinutes(event.startTime) > currentMinutes);
+            
+            if (!nextEvent) {
+                container.innerHTML = `
+                    <div class="next-event">
+                        <h3>🎉 Alle Ihre Termine für heute sind vorbei!</h3>
+                        <p>Vielen Dank für Ihre Teilnahme am HHIS 2025!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const timeUntil = timeToMinutes(nextEvent.startTime) - currentMinutes;
+            const hours = Math.floor(timeUntil / 60);
+            const minutes = timeUntil % 60;
+            
+            let timeText = '';
+            if (hours > 0) {
+                timeText = `${hours}h ${minutes}min`;
+            } else {
+                timeText = `${minutes} Minuten`;
+            }
+            
+            container.innerHTML = `
+                <div class="next-event">
+                    <h3>⏰ Nächster Termin</h3>
+                    <div style="font-size: 1.2em; margin: 10px 0;"><strong>${nextEvent.title}</strong></div>
+                    <div>📍 ${nextEvent.stage} • ${nextEvent.startTime}</div>
+                    <div class="time-until">in ${timeText}</div>
+                </div>
+            `;
+        }
+
+        function timeToMinutes(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function setupNotifications() {
+            // Clear existing notifications
+            notificationIntervals.forEach(interval => clearInterval(interval));
+            notificationIntervals = [];
+            
+            if (!('Notification' in window)) {
+                console.log('Notifications not supported');
+                return;
+            }
+            
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            }
+            
+            myProgram.forEach(event => {
+                const eventTime = timeToMinutes(event.startTime);
+                
+                // 15 minutes before
+                if (document.getElementById('notify-15min').checked) {
+                    scheduleNotification(event, eventTime - 15, '15 Minuten');
+                }
+                
+                // 5 minutes before
+                if (document.getElementById('notify-5min').checked) {
+                    scheduleNotification(event, eventTime - 5, '5 Minuten');
+                }
+                
+                // At start
+                if (document.getElementById('notify-start').checked) {
+                    scheduleNotification(event, eventTime, 'jetzt');
+                }
+            });
+        }
+
+        function scheduleNotification(event, notifyTime, timeText) {
+            const interval = setInterval(() => {
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                const today = now.getDate() === 10 && now.getMonth() === 6; // 10. Juli
+                
+                if (today && currentMinutes === notifyTime) {
+                    showNotification(event, timeText);
+                    clearInterval(interval);
+                }
+            }, 60000); // Check every minute
+            
+            notificationIntervals.push(interval);
+        }
+
+        function showNotification(event, timeText) {
+            const title = timeText === 'jetzt' ? 
+                `${event.title} beginnt jetzt!` : 
+                `${event.title} beginnt in ${timeText}`;
+            
+            const options = {
+                body: `${event.stage} • ${event.startTime}-${event.endTime}`,
+                icon: '🚀',
+                requireInteraction: true
+            };
+            
+            if (Notification.permission === 'granted') {
+                new Notification(title, options);
+            }
+            
+            // Play sound if enabled
+            if (document.getElementById('sound-notifications').checked) {
+                // Create a simple beep sound
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMyProgramDisplay();
+            setupNotifications();
+            
+            // Update buttons for already added events
+            myProgram.forEach(event => {
+                document.querySelectorAll('.add-to-program').forEach(btn => {
+                    const card = btn.closest('.event-card');
+                    const title = card.querySelector('.event-title').textContent;
+                    const time = card.querySelector('.event-time').textContent;
+                    
+                    if (title === event.title && time.includes(event.startTime)) {
+                        btn.textContent = 'Hinzugefügt ✓';
+                        btn.classList.add('added');
+                    }
+                });
+            });
+            
+            // Update next event every minute
+            setInterval(updateNextEvent, 60000);
+            updateNextEvent();
+        });
+    </script>
+</body>
+</html>">
+                        <div class="event-time">10:00 - 10:30</div>
+                        <div class="event-title">Eröffnung & Welcome</div>
+                        <div class="event-speaker">Dr. Melanie Leonhard & Maryam Blumenthal</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Offizielle Eröffnung des HHIS 2025 durch die Senatorinnen. Begrüßung und Überblick über den Tag.</div>
+                        <button class="add-to-program" onclick="addToProgram('10:00', '10:30', 'Eröffnung & Welcome', 'Startup Stage', 'Dr. Melanie Leonhard & Maryam Blumenthal')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">11:00 - 11:45</div>
+                        <div class="event-title">Startup Pitch Session #1</div>
+                        <div class="event-speaker">Hamburger Startups</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Innovative Hamburger Startups präsentieren ihre Lösungen in 5-Minuten-Pitches.</div>
+                        <button class="add-to-program" onclick="addToProgram('11:00', '11:45', 'Startup Pitch Session #1', 'Startup Stage', 'Hamburger Startups')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">12:00 - 12:45</div>
+                        <div class="event-title">Hamburg Innovationsradar</div>
+                        <div class="event-speaker">Miriam Pütz & Nina Alswede</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Trends, Projekte und Akteure die Innovation in Hamburg vorantreiben.</div>
+                        <button class="add-to-program" onclick="addToProgram('12:00', '12:45', 'Hamburg Innovationsradar', 'Startup Stage', 'Miriam Pütz & Nina Alswede')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">14:00 - 14:45</div>
+                        <div class="event-title">Was macht ein gutes Startup aus?</div>
+                        <div class="event-speaker">Panel Discussion</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Expert*innen diskutieren, was Startups für Investoren attraktiv macht.</div>
+                        <button class="add-to-program" onclick="addToProgram('14:00', '14:45', 'Was macht ein gutes Startup aus?', 'Startup Stage', 'Panel Discussion')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">15:30 - 16:15</div>
+                        <div class="event-title">Startup Pitch Session #2</div>
+                        <div class="event-speaker">Local Heroes</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Weitere innovative Hamburger Unternehmen stellen sich vor.</div>
+                        <button class="add-to-program" onclick="addToProgram('15:30', '16:15', 'Startup Pitch Session #2', 'Startup Stage', 'Local Heroes')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">17:00 - 17:45</div>
+                        <div class="event-title">Scale-up Success Stories</div>
+                        <div class="event-speaker">Erfolgreiche Hamburger Unternehmer</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Erfahrungsaustausch von Unternehmer*innen, die erfolgreich skaliert haben.</div>
+                        <button class="add-to-program" onclick="addToProgram('17:00', '17:45', 'Scale-up Success Stories', 'Startup Stage', 'Erfolgreiche Hamburger Unternehmer')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Talent Hub -->
+            <div class="stage-content" id="talent">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">10:30 - 11:15</div>
+                        <div class="event-title">War of Talents - Talente gewinnen & halten</div>
+                        <div class="event-speaker">HR Expert*innen Panel</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Strategien zur Talentgewinnung in Zeiten des Fachkräftemangels.</div>
+                        <button class="add-to-program" onclick="addToProgram('10:30', '11:15', 'War of Talents - Talente gewinnen & halten', 'Talent Hub', 'HR Expert*innen Panel')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">11:30 - 12:15</div>
+                        <div class="event-title">Masterclass: Agile Führung</div>
+                        <div class="event-speaker">Leadership Coach</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Interaktive Session zu modernen Führungsmethoden in agilen Unternehmen.</div>
+                        <button class="add-to-program" onclick="addToProgram('11:30', '12:15', 'Masterclass: Agile Führung', 'Talent Hub', 'Leadership Coach')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">13:00 - 13:45</div>
+                        <div class="event-title">New Work & Remote Culture</div>
+                        <div class="event-speaker">Arbeitsforschung Panel</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Zukunft der Arbeit und neue Arbeitsmodelle in der digitalen Zeit.</div>
+                        <button class="add-to-program" onclick="addToProgram('13:00', '13:45', 'New Work & Remote Culture', 'Talent Hub', 'Arbeitsforschung Panel')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">14:30 - 15:15</div>
+                        <div class="event-title">Diversity & Inclusion in Tech</div>
+                        <div class="event-speaker">D&I Spezialist*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Wie Vielfalt Innovation fördert und Teams stärker macht.</div>
+                        <button class="add-to-program" onclick="addToProgram('14:30', '15:15', 'Diversity & Inclusion in Tech', 'Talent Hub', 'D&I Spezialist*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">16:00 - 16:45</div>
+                        <div class="event-title">Skills der Zukunft</div>
+                        <div class="event-speaker">Bildungsexpert*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Welche Fähigkeiten brauchen Arbeitnehmer*innen von morgen?</div>
+                        <button class="add-to-program" onclick="addToProgram('16:00', '16:45', 'Skills der Zukunft', 'Talent Hub', 'Bildungsexpert*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Innovation -->
+            <div class="stage-content" id="social">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">10:45 - 11:30</div>
+                        <div class="event-title">Social Impact Innovation</div>
+                        <div class="event-speaker">Social Entrepreneurs</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Innovative Lösungen für gesellschaftliche Herausforderungen.</div>
+                        <button class="add-to-program" onclick="addToProgram('10:45', '11:30', 'Social Impact Innovation', 'Social Innovation', 'Social Entrepreneurs')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">12:15 - 13:00</div>
+                        <div class="event-title">Klima & Energie - Hamburgs grüne Zukunft</div>
+                        <div class="event-speaker">Klimaschutz Expert*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Nachhaltige Energielösungen und Klimainnovationen aus Hamburg.</div>
+                        <button class="add-to-program" onclick="addToProgram('12:15', '13:00', 'Klima & Energie - Hamburgs grüne Zukunft', 'Social Innovation', 'Klimaschutz Expert*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">14:15 - 15:00</div>
+                        <div class="event-title">Circular Economy in der Praxis</div>
+                        <div class="event-speaker">Kreislaufwirtschaft Panel</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Wie Unternehmen zur Kreislaufwirtschaft beitragen können.</div>
+                        <button class="add-to-program" onclick="addToProgram('14:15', '15:00', 'Circular Economy in der Praxis', 'Social Innovation', 'Kreislaufwirtschaft Panel')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">15:45 - 16:30</div>
+                        <div class="event-title">Urban Development & Smart City</div>
+                        <div class="event-speaker">Stadtplanung Expert*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Digitale Lösungen für lebenswerte Städte.</div>
+                        <button class="add-to-program" onclick="addToProgram('15:45', '16:30', 'Urban Development & Smart City', 'Social Innovation', 'Stadtplanung Expert*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kitchen Talks -->
+            <div class="stage-content" id="kitchen">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">11:15 - 11:45</div>
+                        <div class="event-title">Novel Food Revolution</div>
+                        <div class="event-speaker">Vincent Gassl, Bluu Seafood</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Innovative Lebensmitteltechnologien und alternative Proteine.</div>
+                        <button class="add-to-program" onclick="addToProgram('11:15', '11:45', 'Novel Food Revolution', 'Kitchen Talks', 'Vincent Gassl, Bluu Seafood')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">12:30 - 13:00</div>
+                        <div class="event-title">Sustainable Food Systems</div>
+                        <div class="event-speaker">FoodTech Startups</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Nachhaltige Lebensmittelsysteme der Zukunft.</div>
+                        <button class="add-to-program" onclick="addToProgram('12:30', '13:00', 'Sustainable Food Systems', 'Kitchen Talks', 'FoodTech Startups')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">15:00 - 15:30</div>
+                        <div class="event-title">Vertical Farming & AgTech</div>
+                        <div class="event-speaker">Agricultural Innovation</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Vertikale Landwirtschaft und technologische Innovationen im Agrarsektor.</div>
+                        <button class="add-to-program" onclick="addToProgram('15:00', '15:30', 'Vertical Farming & AgTech', 'Kitchen Talks', 'Agricultural Innovation')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">16:30 - 17:00</div>
+                        <div class="event-title">Food & Lifestyle Trends</div>
+                        <div class="event-speaker">Lifestyle Expert*innen</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Neue Trends in Ernährung und gesundem Lifestyle.</div>
+                        <button class="add-to-program" onclick="addToProgram('16:30', '17:00', 'Food & Lifestyle Trends', 'Kitchen Talks', 'Lifestyle Expert*innen')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summit Stage -->
+            <div class="stage-content" id="summit">
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">13:15 - 14:00</div>
+                        <div class="event-title">Wer gestaltet Hamburgs Zukunft?</div>
+                        <div class="event-speaker">Politik, Wirtschaft & Wissenschaft Panel</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Visionen und Allianzen für Hamburg als innovative Metropole.</div>
+                        <button class="add-to-program" onclick="addToProgram('13:15', '14:00', 'Wer gestaltet Hamburgs Zukunft?', 'Summit Stage', 'Politik, Wirtschaft & Wissenschaft Panel')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)">
+                        <div class="event-time">15:15 - 16:00</div>
+                        <div class="event-title">Innovation & Transformation bei Beiersdorf</div>
+                        <div class="event-speaker">Volker Kallmayer, Beiersdorf</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-description">Wie etablierte Unternehmen Innovation vorantreiben.</div>
+                        <button class="add-to-program" onclick="addToProgram('15:15', '16:00', 'Innovation & Transformation bei Beiersdorf', 'Summit Stage', 'Volker Kallmayer, Beiersdorf')">Zu meinem Programm hinzufügen</button>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="event-header" onclick="toggleDetails(this)
